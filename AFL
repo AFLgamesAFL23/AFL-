@@ -1,0 +1,67 @@
+README
+import random
+
+class Player:
+    def __init__(self, name, skills):
+        self.name = name
+        self.skills = skills
+        self.energy = 100
+        self.injured = False
+
+class Team:
+    def __init__(self, name, players):
+        self.name = name
+        self.players = players
+        self.score = 0
+
+def simulate_match(team1, team2):
+    # Simulate a match between two teams
+    for _ in range(4):  # Four quarters
+        play_quarter(team1, team2)
+
+def play_quarter(team1, team2):
+    # Simulate a single quarter of the match
+    for _ in range(10):  # Ten plays per quarter
+        player1 = random.choice(team1.players)
+        player2 = random.choice(team2.players)
+        if not player1.injured and not player2.injured:
+            tackle(player1, player2)
+            kick(player1, team1)
+            mark(player2, team2)
+
+def tackle(attacker, defender):
+    # Simulate a tackle attempt
+    success_chance = (attacker.skills['tackling'] - defender.skills['dodging']) / 100
+    if random.random() < success_chance:
+        print(attacker.name, "tackles", defender.name)
+    else:
+        print(attacker.name, "misses the tackle")
+
+def kick(player, team):
+    # Simulate a kick attempt
+    success_chance = player.skills['kicking'] / 100
+    if random.random() < success_chance:
+        team.score += 6  # Points for a goal
+        print(player.name, "kicks a goal!")
+    else:
+        print(player.name, "misses the goal")
+
+def mark(player, team):
+    # Simulate a marking attempt
+    success_chance = player.skills['marking'] / 100
+    if random.random() < success_chance:
+        print(player.name, "takes a mark")
+    else:
+        print(player.name, "fails to mark")
+
+# Sample player attributes
+player_attributes = {'kicking': 80, 'marking': 70, 'tackling': 60, 'dodging': 50}
+
+# Create teams
+team1 = Team("Team 1", [Player("Player 1", player_attributes) for _ in range(18)])
+team2 = Team("Team 2", [Player("Player 2", player_attributes) for _ in range(18)])
+
+# Simulate a match
+simulate_match(team1, team2)
+
+print("Final score:", team1.name, team1.score, "-", team2.name, team2.score)
